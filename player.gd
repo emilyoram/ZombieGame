@@ -3,11 +3,12 @@ extends CharacterBody3D
 const SPEED = 5.0
 const JUMP_VELOCITY = 4.5
 const SENSITIVITY = 0.01
+@export var BULLET_SPEED = 50.0
 
 @export var camera: Camera3D
 @export var head: Node3D
 
-@onready var bullet_spawn = $"Bullet Spawn"
+@onready var bullet_spawn = $Head/Camera3D/BulletSpawn
 
 var bullet_scene = preload("res://bullet.tscn")
 
@@ -47,7 +48,9 @@ func _physics_process(delta: float) -> void:
 
 	move_and_slide()
 
+# Fires a bullet
 func fire_bullet():
-	var bullet_instance = bullet_scene.instantiate()
-	add_child(bullet_instance)
-	bullet_instance.angle = camera.rotation
+	var bullet = bullet_scene.instantiate()
+	add_sibling(bullet)
+	bullet.transform = bullet_spawn.global_transform
+	bullet.linear_velocity = bullet_spawn.global_transform.basis.z * -1 * BULLET_SPEED
