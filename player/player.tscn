@@ -1,8 +1,11 @@
-[gd_scene load_steps=3 format=3 uid="uid://dcq2nqv32xo6r"]
+[gd_scene load_steps=4 format=3 uid="uid://dcq2nqv32xo6r"]
 
 [ext_resource type="Script" uid="uid://df76yojjrfyut" path="res://player/player.gd" id="1_oul6g"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_7dm0k"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_oul6g"]
+size = Vector3(1, 1.9794922, 1.0428467)
 
 [node name="Player" type="CharacterBody3D" node_paths=PackedStringArray("camera", "head")]
 transform = Transform3D(0.99999994, 0, 0, 0, 1, 0, 0, 0, 0.99999994, 0, 0, 0)
@@ -15,9 +18,42 @@ head = NodePath("Head")
 shape = SubResource("CapsuleShape3D_7dm0k")
 
 [node name="Head" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5026288, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 
 [node name="Camera3D" type="Camera3D" parent="Head"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.024843574, 0, 0)
 
 [node name="BulletSpawn" type="Node3D" parent="Head/Camera3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.05090648, 0.060094357, -0.6849399)
+
+[node name="AmmoLabel" type="Label" parent="."]
+offset_left = 1024.0
+offset_top = 576.0
+offset_right = 1176.0
+offset_bottom = 600.0
+text = "Ammo: 12"
+
+[node name="StaminaBar" type="ProgressBar" parent="."]
+offset_left = 21.0
+offset_top = 479.0
+offset_right = 60.0
+offset_bottom = 622.0
+max_value = 200.0
+fill_mode = 3
+
+[node name="GrenadeLabel" type="Label" parent="."]
+offset_left = 1024.0
+offset_top = 600.0
+offset_right = 1176.0
+offset_bottom = 624.0
+text = "Grenades: 2"
+
+[node name="Detector" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Detector"]
+transform = Transform3D(0.99999464, 0, 0, 0, 1, 0, 0, 0, 0.99999464, 0, 0.068847656, 0.00042724048)
+shape = SubResource("BoxShape3D_oul6g")
+
+[connection signal="body_entered" from="Detector" to="." method="_on_detector_body_entered"]
