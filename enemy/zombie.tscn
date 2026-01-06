@@ -12,6 +12,7 @@ albedo_color = Color(0.16464633, 0.2793599, 0.13817242, 1)
 material = SubResource("StandardMaterial3D_0xm2m")
 
 [node name="Zombie" type="CharacterBody3D"]
+collision_layer = 2
 script = ExtResource("1_7k104")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
@@ -21,4 +22,10 @@ shape = SubResource("ConvexPolygonShape3D_1bvp3")
 mesh = SubResource("CapsuleMesh_h2yge")
 
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
+path_desired_distance = 3.0
 debug_enabled = true
+
+[node name="RepathTimer" type="Timer" parent="."]
+autostart = true
+
+[connection signal="timeout" from="RepathTimer" to="." method="_on_repath_timer_timeout"]

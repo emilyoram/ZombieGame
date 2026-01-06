@@ -2,12 +2,15 @@ extends CharacterBody3D
 
 signal hit_by_bullet
 
-const SPEED = 5.0
+const SPEED = 7.0
+var player
 
 @onready var nav_agent: NavigationAgent3D = $NavigationAgent3D
 
 func _ready():
 	add_to_group("zombies") # Used for signals
+	player = get_tree().get_first_node_in_group("player")
+	
 	
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("debug_nav"):
@@ -20,6 +23,9 @@ func _hit_by_bullet():
 	print("hit")
 	hit_by_bullet.emit()
 	queue_free()
+
+func path_to_player():
+	nav_agent.set_target_position(player.global_position)
 
 func _physics_process(delta: float) -> void:
 	
@@ -34,3 +40,7 @@ func _physics_process(delta: float) -> void:
 		velocity += get_gravity() * delta
 			
 	move_and_slide()
+
+
+func _on_repath_timer_timeout() -> void:
+	path_to_player()

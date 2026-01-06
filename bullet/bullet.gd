@@ -11,3 +11,4 @@ func _physics_process(delta: float) -> void:
 	if collisions != null:
 		if collisions.get_collider().is_in_group("zombies"):
 			collisions.get_collider()._hit_by_bullet()
+		queue_free()
