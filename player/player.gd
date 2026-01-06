@@ -1,9 +1,10 @@
-extends CharacterBody3D
+class_name Player extends CharacterBody3D
 
 const SPEED = 5.0
 const JUMP_VELOCITY = 4.5
 const SENSITIVITY = 0.01
 const SPRINT_MODIFIER = 1.5
+const AMMO_CAPACITY = 12
 @export var BULLET_SPEED = 8.0
 
 @export var camera: Camera3D
@@ -11,7 +12,8 @@ const SPRINT_MODIFIER = 1.5
 
 @onready var bullet_spawn = $Head/Camera3D/BulletSpawn
 
-var bullet_scene = preload("res://bullet/bullet.tscn")
+var bullet_scene = preload("res://objects/bullet.tscn")
+var ammo = AMMO_CAPACITY
 
 func _ready():
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
@@ -19,8 +21,10 @@ func _ready():
 func _input(event):
 	if event.is_action_pressed("ui_cancel"):
 		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
-	if event.is_action_pressed("click"):
+	if event.is_action_pressed("click") and ammo > 0:
 		fire_bullet()
+		ammo -= 1
+		print(ammo)
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
@@ -60,3 +64,6 @@ func fire_bullet():
 	add_sibling(bullet)
 	bullet.transform = bullet_spawn.global_transform
 	bullet.linear_velocity = bullet_spawn.global_transform.basis.z * -1 * BULLET_SPEED
+	
+func reload_ammo():
+	ammo = AMMO_CAPACITY

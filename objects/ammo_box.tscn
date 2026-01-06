@@ -1,0 +1,61 @@
+[gd_scene load_steps=8 format=3 uid="uid://ikjt5bfvco7h"]
+
+[ext_resource type="Script" uid="uid://ddo3oa3vvkgvj" path="res://objects/ammo_box.gd" id="1_nwo05"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1bvp3"]
+albedo_color = Color(0.8707766, 0.53114086, 0.47064066, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_lquwl"]
+material = SubResource("StandardMaterial3D_1bvp3")
+size = Vector3(1.1, 0.4, 0.8)
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_7mycd"]
+points = PackedVector3Array(0.5311969, 0.19999999, 0.39169976, -0.53545016, -0.19999999, -0.39163363, -0.53545016, -0.19999999, 0.3948083, 0.53542966, -0.19999999, -0.39163363, -0.5312174, 0.19999999, -0.3885251, 0.53542966, -0.19999999, 0.3948083, 0.5311969, 0.19999999, -0.3885251, -0.5312174, 0.19999999, 0.39169976)
+
+[sub_resource type="Animation" id="Animation_m745f"]
+resource_name = "rotate"
+length = 5.0
+loop_mode = 1
+tracks/0/type = "rotation_3d"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array(0, 1, 0, 0, 0, 1, 5, 1, 0, 1, 0, 0)
+
+[sub_resource type="Animation" id="Animation_nwo05"]
+length = 0.001
+tracks/0/type = "rotation_3d"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array(0, 1, 0, 0, 0, 1)
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_xmxkj"]
+_data = {
+&"RESET": SubResource("Animation_nwo05"),
+&"rotate": SubResource("Animation_m745f")
+}
+
+[node name="AmmoBox" type="Area3D"]
+script = ExtResource("1_nwo05")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_lquwl")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("ConvexPolygonShape3D_7mycd")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_xmxkj")
+}
+autoplay = "rotate"
+
+[node name="RefreshTimer" type="Timer" parent="."]
+wait_time = 30.0
+
+[connection signal="timeout" from="RefreshTimer" to="." method="_on_refresh_timer_timeout"]

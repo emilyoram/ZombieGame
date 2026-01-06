@@ -1,9 +1,9 @@
 [gd_scene load_steps=11 format=3 uid="uid://dh7ygg2t2lwdb"]
 
 [ext_resource type="PackedScene" uid="uid://dcq2nqv32xo6r" path="res://player/player.tscn" id="1_h2yge"]
-[ext_resource type="PackedScene" uid="uid://dgpo5rapbbhae" path="res://enemy/zombie.tscn" id="2_0xm2m"]
 [ext_resource type="Script" uid="uid://unjghcla1awi" path="res://score.gd" id="3_h2yge"]
-[ext_resource type="Script" uid="uid://cbub4yam3n0yc" path="res://zombie_spawner.gd" id="4_1bvp3"]
+[ext_resource type="Script" uid="uid://cbub4yam3n0yc" path="res://enemy/zombie_spawner.gd" id="4_1bvp3"]
+[ext_resource type="PackedScene" uid="uid://ikjt5bfvco7h" path="res://objects/ammo_box.tscn" id="4_lquwl"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ig7tw"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -28,7 +28,7 @@ albedo_color = Color(0.3496138, 0.2629208, 0.06577447, 1)
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ig7tw"]
 albedo_color = Color(0.38496414, 0.38496414, 0.38496414, 1)
 
-[node name="Node3D" type="Node3D"]
+[node name="Main" type="Node3D"]
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
@@ -135,15 +135,6 @@ use_collision = true
 size = Vector3(23.658203, 29.374008, 22.17572)
 material = SubResource("StandardMaterial3D_ig7tw")
 
-[node name="Enemy2" parent="." instance=ExtResource("2_0xm2m")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.687029, 0.5, 0)
-
-[node name="Enemy3" parent="." instance=ExtResource("2_0xm2m")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.745, 0.5, -1.064)
-
-[node name="Enemy" parent="." instance=ExtResource("2_0xm2m")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.051, 0.5, 3.236)
-
 [node name="Score" type="Label" parent="."]
 offset_left = 974.0
 offset_top = 18.0
@@ -166,5 +157,9 @@ script = ExtResource("4_1bvp3")
 wait_time = 5.050000000000001
 autostart = true
 
+[node name="AmmoBox" parent="." instance=ExtResource("4_lquwl")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5270896, 88.200066)
+
 [connection signal="zombie_spawned" from="ZombieSpawner" to="Score" method="_on_zombie_spawner_zombie_spawned"]
 [connection signal="timeout" from="ZombieSpawner/SpawnTimer" to="ZombieSpawner" method="_on_spawn_timer_timeout"]
+[connection signal="body_entered" from="AmmoBox" to="AmmoBox" method="_on_body_entered"]
