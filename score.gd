@@ -16,7 +16,7 @@ func _on_enemy_hit_by_bullet() -> void:
 # Makes sure that when a new zombie spawns we're listening if they get hit
 func _on_zombie_spawner_zombie_spawned() -> void:
 	var zombies = get_tree().get_nodes_in_group("zombies")
-	print(str(zombies))
+	print(str(len(zombies)) + " zombies")
 	for zombie in zombies:
 		if not zombie.hit_by_bullet.is_connected(_on_enemy_hit_by_bullet):
 			zombie.hit_by_bullet.connect(_on_enemy_hit_by_bullet)

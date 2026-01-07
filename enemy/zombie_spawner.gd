@@ -1,6 +1,9 @@
 extends Node3D
 
 const ZOMBIES_BEFORE_SPEED_INCREASE = 8
+const ZOMBIE_LIMIT = 8
+
+@export var initial_spawn_time = 5.05
 
 @onready var zombie_scene = preload("res://enemy/zombie.tscn")
 @onready var spawn_timer = $SpawnTimer
@@ -8,6 +11,9 @@ const ZOMBIES_BEFORE_SPEED_INCREASE = 8
 var zombies = 0
 
 signal zombie_spawned
+
+func _ready() -> void:
+	spawn_timer.wait_time = initial_spawn_time
 
 func spawn_zombie():
 	var zombie = zombie_scene.instantiate()
@@ -25,4 +31,6 @@ func spawn_zombie():
 		print(str(spawn_timer.wait_time))
 	
 func _on_spawn_timer_timeout() -> void:
-	spawn_zombie()
+	# Checks to make sure we don't spawn too many zombies that the game can't handle it
+	if len(get_tree().get_nodes_in_group("zombies")) <= ZOMBIE_LIMIT:
+		spawn_zombie()

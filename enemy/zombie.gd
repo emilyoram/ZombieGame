@@ -4,12 +4,15 @@ signal hit_by_bullet
 
 const SPEED = 7.0
 var player
+var direction
+var player_nearby = false
 
 @onready var nav_agent: NavigationAgent3D = $NavigationAgent3D
 
 func _ready():
 	add_to_group("zombies") # Used for signals
 	player = get_tree().get_first_node_in_group("player")
+	path_to_player()
 	
 	
 func _unhandled_input(event: InputEvent) -> void:
@@ -26,12 +29,14 @@ func _hit_by_bullet():
 
 func path_to_player():
 	nav_agent.set_target_position(player.global_position)
-
-func _physics_process(delta: float) -> void:
-	
 	var destination = nav_agent.get_next_path_position()
 	var local_destination = destination - global_position
-	var direction = local_destination.normalized()
+	direction = local_destination.normalized()
+
+func _physics_process(delta: float) -> void:
+	# If the player is nearby we recalculate the path to them more often
+	if player_nearby:
+		path_to_player()
 	
 	velocity = direction * SPEED
 	
@@ -44,3 +49,12 @@ func _physics_process(delta: float) -> void:
 
 func _on_repath_timer_timeout() -> void:
 	path_to_player()
+
+
+func _on_player_detector_body_entered(body: Node3D) -> void:
+	if body is Player:
+		player_nearby = true
+
+func _on_player_detector_body_exited(body: Node3D) -> void:
+	if body is Player:
+		player_nearby = false

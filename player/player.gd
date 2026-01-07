@@ -106,12 +106,15 @@ func reload_ammo():
 
 func _on_detector_body_entered(_body: Node3D) -> void:
 	if not dead:
-		print("You died! RIP")
-		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
-		died_label.show()
-		death_timer.start()
-		player_died.emit()
-		dead = true
+		die()
+
+func die():
+	print("You died! RIP")
+	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	died_label.show()
+	death_timer.start()
+	player_died.emit()
+	dead = true
 		
 func _on_death_timer_timeout() -> void:
 	get_tree().change_scene_to_file("res://menu.tscn")

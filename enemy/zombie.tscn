@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://dgpo5rapbbhae"]
+[gd_scene load_steps=6 format=3 uid="uid://dgpo5rapbbhae"]
 
 [ext_resource type="Script" uid="uid://cdkoq2hmhw68b" path="res://enemy/zombie.gd" id="1_7k104"]
 
@@ -10,6 +10,9 @@ albedo_color = Color(0.16464633, 0.2793599, 0.13817242, 1)
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_h2yge"]
 material = SubResource("StandardMaterial3D_0xm2m")
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_0vq01"]
+radius = 12.5
 
 [node name="Zombie" type="CharacterBody3D"]
 collision_layer = 2
@@ -25,6 +28,14 @@ mesh = SubResource("CapsuleMesh_h2yge")
 debug_enabled = true
 
 [node name="RepathTimer" type="Timer" parent="."]
+wait_time = 2.0
 autostart = true
 
+[node name="PlayerDetector" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="PlayerDetector"]
+shape = SubResource("CylinderShape3D_0vq01")
+
 [connection signal="timeout" from="RepathTimer" to="." method="_on_repath_timer_timeout"]
+[connection signal="body_entered" from="PlayerDetector" to="." method="_on_player_detector_body_entered"]
+[connection signal="body_exited" from="PlayerDetector" to="." method="_on_player_detector_body_exited"]
