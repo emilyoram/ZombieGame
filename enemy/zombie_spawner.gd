@@ -32,5 +32,5 @@ func spawn_zombie():
 	
 func _on_spawn_timer_timeout() -> void:
 	# Checks to make sure we don't spawn too many zombies that the game can't handle it
-	if len(get_tree().get_nodes_in_group("zombies")) <= ZOMBIE_LIMIT:
+	if len(get_tree().get_nodes_in_group("zombies")) < ZOMBIE_LIMIT:
 		spawn_zombie()
